@@ -14,7 +14,11 @@
     "node": "0.10.x"
   },
   "homepage": "https://github.com/plouc/mozaik-ext-sensu",
-  "dependencies": {},
+  "dependencies": {
+      "chalk": "^0.5.1",
+      "convict": "^0.6.1",
+      "superagent-bluebird-promise": "^0.6.0"
+  },
   "main": "./components.js",
   "devDependencies": {
     "d3": "^3.5.5",
