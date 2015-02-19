@@ -1,27 +1,41 @@
 var request = require('superagent');
-var config  = require('./../../../config');
-
+var chalk   = require('chalk');
+var config  = require('./config');
 require('superagent-bluebird-promise');
 
-function buildEndpointCall(endPoint) {
-    return function () {
-        return request.get(config.api.sensu.baseUrl + '/api/' + endPoint)
-            .auth(config.api.sensu.auth.user, config.api.sensu.auth.password)
-            .promise()
-            .then(function (res) {
-                return res.body;
-            })
-            .catch(function (err) {
-                console.log(err);
-            })
-        ;
-    };
-}
+/**
+ * @param {Mozaik} mozaik
+ */
+var client = function (mozaik) {
+    mozaik.loadApiConfig(config);
 
-module.exports = {
-    clients: buildEndpointCall('clients'),
-    checks:  buildEndpointCall('checks'),
-    events:  buildEndpointCall('events')
+    function buildEndpointCall(endPoint) {
+        return function () {
+            var url = config.get('sensu.baseUrl') + '/api/' + endPoint;
+
+            mozaik.logger.info(chalk.yellow(`[sensu] fetching ${ url }`));
+
+            return request.get(url)
+                .auth(
+                    config.get('sensu.basicAuthUser'),
+                    config.get('sensu.basicAuthPassword')
+                )
+                .promise()
+                .then(function (res) {
+                    return res.body;
+                })
+                .catch(function (e) {
+                    mozaik.logger.error(chalk.red(`[sensu] ${ e.message }`));
+                })
+            ;
+        };
+    }
+
+    return {
+        clients: buildEndpointCall('clients'),
+        checks:  buildEndpointCall('checks'),
+        events:  buildEndpointCall('events')
+    };
 };
 
-require('./../../../lib').hub.registerApi('sensu', module.exports);
+module.exports = client;
