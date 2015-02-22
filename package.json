@@ -15,14 +15,11 @@
   },
   "homepage": "https://github.com/plouc/mozaik-ext-sensu",
   "dependencies": {
-      "chalk": "^0.5.1",
-      "convict": "^0.6.1",
-      "superagent-bluebird-promise": "^0.6.0"
+    "chalk": "^0.5.1",
+    "convict": "^0.6.1",
+    "superagent-bluebird-promise": "^0.6.0"
   },
   "main": "./components.js",
-  "scripts": {
-    "prepublish": "gulp lib"
-  },
   "devDependencies": {
     "d3": "^3.5.5",
     "del": "^1.1.1",
@@ -32,13 +29,26 @@
     "gulp-regex-replace": "^0.2.3",
     "gulp-rename": "^1.2.0",
     "gulp-strip-debug": "^1.0.2",
+    "jest": "^0.1.37",
+    "jest-cli": "^0.4.0",
     "jquery": "^2.1.3",
     "lodash": "^3.2.0",
     "moment": "^2.9.0",
+    "mozaik": "0.0.9-beta",
     "react": "^0.12.2",
+    "react-tools": "^0.12.2",
     "reflux": "^0.2.5"
   },
-  "peerDependencies": {
-    "mozaik": "*"
+  "scripts": {
+    "prepublish": "gulp lib",
+    "test": "jest"
+  },
+  "jest": {
+    "scriptPreprocessor": "<rootDir>/src/preprocessor.js",
+    "unmockedModulePathPatterns": [
+      "<rootDir>/node_modules/react",
+      "<rootDir>/node_modules/lodash",
+      "<rootDir>/node_modules/moment"
+    ]
   }
 }

@@ -1,6 +1,10 @@
 jest.dontMock('./../components/Events.jsx');
 jest.dontMock('./../components/Event.jsx');
 
+jest.setMock('mozaik/browser', {
+    Mixin: { ApiConsumer: null }
+});
+
 var React, TestUtils, Events, events;
 
 var sampleEvents = [
